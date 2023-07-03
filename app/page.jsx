@@ -1,3 +1,4 @@
+import Feed from "@components/Feed";
 
 const Home = () => {
     return (
@@ -11,7 +12,7 @@ const Home = () => {
                 RizzyPrompts is an open-source AI prompting tool for the modern world to discover, create and share creative prompts
             </p>
 
-            {/* Feed Component */}
+            <Feed />
         </section>
     )
 }
