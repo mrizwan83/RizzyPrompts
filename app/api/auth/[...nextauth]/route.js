@@ -1,5 +1,8 @@
 import NextAuth from "next-auth/next";
 import GoogleProvider from 'next-auth/providers/google';
+import GithubProvider from "next-auth/providers/github";
+import AppleProvider from 'next-auth/providers/apple';
+import FacebookProvider from 'next-auth/providers/facebook';
 
 import User from "@models/user";
 import { connectToDB } from "@utils/database";
@@ -15,44 +18,58 @@ const handler = NextAuth({
         GoogleProvider({
             clientId: process.env.GOOGLE_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET
-        })
+        }),
+        AppleProvider({
+            clientId: process.env.APPLE_ID,
+            clientSecret: process.env.APPLE_SECRET
+        }),
+        FacebookProvider({
+            clientId: process.env.FACEBOOK_ID,
+            clientSecret: process.env.FACEBOOK_SECRET
+        }),
+        GithubProvider({
+            clientId: process.env.GITHUB_ID,
+            clientSecret: process.env.GITHUB_SECRET,
+        }),
     ],
-    // allows us to know which users are currently logged in
-    async session({ session }) {
-        const sessionUser = await User.findOne({
-            email: session.user.email
-        });
-
-        session.user.id = sessionUser._id.toString();
-
-        return session;
-    },
-    // serverless route -> lambda function -> only spins up when called ->
-    async signIn({ profile }) {
-        try {
-            await connectToDB();
-            // check if a user already exists
-            const userExists = await User.findOne({
-                email: profile.email
+    callbacks: {
+        // allows us to know which users are currently logged in
+        async session({ session }) {
+            const sessionUser = await User.findOne({
+                email: session.user.email
             });
-            // if not, create a new user
 
-            if (!userExists) {
-                await User.create({
-                    email: profile.email,
-                    username: profile.name.replace(" ", "").toLowerCase(),
-                    image: profile.picture
+            session.user.id = sessionUser._id.toString();
+
+            return session;
+        },
+        // serverless route -> lambda function -> only spins up when called ->
+        async signIn({ profile }) {
+            console.log(profile)
+            try {
+                await connectToDB();
+                // check if a user already exists
+                const userExists = await User.findOne({
+                    email: profile.email
                 });
+                // if not, create a new user
+
+                if (!userExists) {
+                    await User.create({
+                        email: profile.email,
+                        username: profile.name.replace(" ", "").toLowerCase() || profile.username,
+                        image: profile.picture
+                    });
+                }
+                return true;
+
+            } catch (error) {
+
+                console.log(error);
+
+                return false;
             }
-            return true;
-
-        } catch (error) {
-
-            console.log(error);
-
-            return false;
         }
-
     }
 });
 
