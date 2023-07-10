@@ -9,7 +9,7 @@ const Home = () => {
                 <span className="orange_gradient text-center"> AI-Powered Prompts </span>
             </h1>
             <p className="desc text-center">
-                RizzyPrompts is an open-source AI prompting tool for the modern world to discover, create and share creative prompts
+                Unleash your creativity on RizzyPrompts, a platform where users can share, discover, and create captivating prompts designed for seamless integration with AI technologies.
             </p>
 
             <Feed />
