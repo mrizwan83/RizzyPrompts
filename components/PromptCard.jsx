@@ -6,6 +6,14 @@ import { usePathname, useRouter } from 'next/navigation';
 
 const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
     const [copied, setCopied] = useState("");
+
+    // copy to clipboard
+    const handleCopy = () => {
+        setCopied(post.prompt);
+        navigator.clipboard.writeText(post.prompt);
+        setTimeout(() => setCopied(""), 3000);
+    }
+
     return (
         <div className='prompt_card'>
             <div className="flex justify-between items-start gap-5">
@@ -24,7 +32,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
                         {/* <p>{post.creator.email}</p> */}
                     </div>
                 </div>
-                <div className="copy_btn" onClick={() => { }}>
+                <div className="copy_btn" onClick={handleCopy}>
                     <Image
                         src={copied === post.prompt ? '/assets/icons/tick.svg' : '/assets/icons/copy.svg'}
                         alt='copy-to-clipboard'

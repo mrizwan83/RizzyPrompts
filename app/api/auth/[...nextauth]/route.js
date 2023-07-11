@@ -16,15 +16,18 @@ const handler = NextAuth({
         // OAuth authentication providers...
         GoogleProvider({
             clientId: process.env.GOOGLE_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            // name: "or Sign up with Google"
         }),
         FacebookProvider({
             clientId: process.env.FACEBOOK_ID,
-            clientSecret: process.env.FACEBOOK_SECRET
+            clientSecret: process.env.FACEBOOK_SECRET,
+            // name: "or Sign up with Facebook"
         }),
         GithubProvider({
             clientId: process.env.GITHUB_ID,
             clientSecret: process.env.GITHUB_SECRET,
+            // name: "or Sign up with Github"
         }),
     ],
     callbacks: {
