@@ -12,7 +12,7 @@ const ProfilePage = () => {
     // fetch data when page loads
     useEffect(() => {
         const fetchPosts = async () => {
-            const response = await fetch(`/api/users/prompt${session?.user.id}/posts`);
+            const response = await fetch(`/api/users/${session?.user.id}/posts`);
             const data = await response.json();
             setPosts(data);
         }
