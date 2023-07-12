@@ -18,21 +18,68 @@ const PromptCardList = ({ data, handleTagClick }) => {
 }
 
 const Feed = () => {
+
+    // search states 
+    // searchText will be used to display the search params to client
     const [searchText, setSearchText] = useState('');
+    const [searchTimeout, setSearchTimeout] = useState(null);
+    const [searchedResults, setSearchedResults] = useState([]);
+    // all posts
     const [posts, setPosts] = useState([]);
-    const handleSearchChange = (e) => {
 
-    }
+    const fetchPosts = async () => {
+        const response = await fetch('/api/prompt');
+        const data = await response.json();
+        setPosts(data);
+    };
 
-    // fetch data when page loads
+    // fetch post data when page loads
     useEffect(() => {
-        const fetchPosts = async () => {
-            const response = await fetch('/api/prompt');
-            const data = await response.json();
-            setPosts(data);
-        }
         fetchPosts();
     }, []);
+
+    // filter the prompts with the search params
+    const filterPrompts = (searchInput) => {
+        const regex = new RegExp(searchInput, "i"); // the "i" flag is for case-insensitive search
+        console.log(regex);
+        // use direct return on filter func
+        return posts.filter((ele) => (
+            regex.test(ele.creator.username) ||
+            regex.test(ele.tag) ||
+            regex.test(ele.prompt)
+        ));
+    };
+
+    // update search params
+    const handleSearchChange = (e) => {
+        // clear prev timeout to prevent unnecessary or overlapping function calls
+        clearTimeout(searchTimeout);
+        // set the new search input
+        setSearchText(e.target.value);
+
+        // debounce method
+        setSearchTimeout(
+            setTimeout(() => {
+                const searchResult = filterPrompts(e.target.value);
+                setSearchedResults(searchResult);
+            }, 500)
+        );
+    }
+    // By using the setTimeout function and the clearTimeout function together, the code implements a debounce mechanism.
+    // When the user types in the search input field, the debounce mechanism delays the execution of the filtering process. 
+    // If the user continues typing within 500 milliseconds (specified in the setTimeout delay), 
+    // the previous timeout is cleared and a new timeout is set. 
+    // This way, the filtering process is only triggered once the user pauses typing for 500 milliseconds, 
+    // reducing unnecessary computation and providing a smoother user experience.
+
+    // handle tag click
+    const handleTagClick = (tagname) => {
+        setSearchText(tagname);
+
+        const searchResult = filterPrompts(tagname);
+        setSearchedResults(searchResult);
+    };
+
     return (
         <section className='feed'>
             <form className='relative w-full flex-center'>
@@ -45,10 +92,16 @@ const Feed = () => {
                     className='search_input peer'
                 />
             </form>
-            <PromptCardList
+            {/* Search prompts or all prompts on feed */}
+            {searchText ? (
+                <PromptCardList
+                    data={searchedResults}
+                    handleTagClick={handleTagClick}
+                />
+            ) : (<PromptCardList
                 data={posts}
-                handleTagClick={() => { }}
-            />
+                handleTagClick={handleTagClick}
+            />)}
         </section>
     )
 }
