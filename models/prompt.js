@@ -12,9 +12,29 @@ const PromptSchema = new Schema({
     tag: {
         type: String,
         required: [true, 'Tag is required!'],
-    }
+    },
+    upvotes: {
+        type: Number,
+        default: 0,
+    },
+    downvotes: {
+        type: Number,
+        default: 0,
+    },
+    votedBy: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+    }],
+    voteTypes: [{
+        type: String,
+        enum: ['upvote', 'downvote'],
+    }],
 });
 
-const Prompt = models.Prompt || model("Prompt", PromptSchema);
+const Prompt = models.Prompt || model('Prompt', PromptSchema);
 
 export default Prompt;
+
+// By using the enum option, you ensure that the voteTypes field can only accept valid vote types ('upvote' or 'downvote')
+// and reject any other values that are not specified in the enumeration. 
+// This helps maintain data integrity and ensures that only valid vote types are stored in the database.

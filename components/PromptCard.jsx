@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -9,6 +9,61 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
     const pathName = usePathname();
     const router = useRouter();
     const [copied, setCopied] = useState("");
+    const [voted, setVoted] = useState(false); // Track whether the user has voted (first time vote)
+
+    const checkTheVotes = async () => {
+        const alreadyVoted = post.votedBy.includes(session?.user?.id)
+        if (alreadyVoted) setVoted(true);
+    }
+
+    useEffect(() => {
+        checkTheVotes();
+    }, null);
+
+    // votes
+    // we should show buttons to upvote or downvote if the logged in user has not voted
+
+    const handleUpvote = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`/api/prompt/${post._id}/upvote`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId: session?.user.id }),
+            });
+
+            if (response.ok) {
+                // Upvote successful
+                setVoted(true); // Mark the user as voted
+                post.upvotes++; // Update the local vote count
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleDownvote = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`/api/prompt/${post._id}/downvote`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId: session.user.id }),
+            });
+
+            if (response.ok) {
+                // Downvote successful
+                setVoted(true); // Mark the user as voted
+                post.downvotes++; // Update the local vote count
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     // copy to clipboard
     const handleCopy = () => {
@@ -53,8 +108,33 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
                     />
                 </div>
             </div>
-            <p className='my-4 font-satoshi text-sm text-gray-700'>{post.prompt}</p>
+            <p className='my-4 font-satoshi text-medium text-gray-700'>{post.prompt}</p>
             <p className='font-inter text-sm blue_gradient cursor-pointer' onClick={() => handleTagClick && handleTagClick(post.tag)}>#{post.tag}</p>
+            <div className="flex items-center justify-around mt-2 gap-5">
+                <div className="flex justify-center gap-3">
+                    <Image
+                        src='/assets/icons/upvote.svg'
+                        alt='upvotes'
+                        width={22}
+                        height={22}
+                    />
+                    <span className='font-satoshi font-semibold text-gray-900'>{post.upvotes}</span>
+                </div>
+                <div className="flex justify-center gap-3">
+                    <Image
+                        src='/assets/icons/downvote.svg'
+                        alt='downvotes'
+                        width={22}
+                        height={22}
+                    />
+                    <span className='font-satoshi font-semibold text-gray-900'>{post.downvotes}</span>
+                </div>
+            </div>
+            {/* if user is logged, give them voting functionality */}
+            {session && !voted ? (<div className="flex items-center justify-around mt-2 gap-5">
+                <button disabled={!session} className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-small rounded-full text-sm px-4 py-2 text-center mr-2 mb-2" onClick={handleUpvote}>Upvote</button>
+                <button disabled={!session} className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-small rounded-full text-sm px-4 py-2 text-center mr-2 mb-2" onClick={handleDownvote}>Downvote</button>
+            </div>) : null}
             {/* check to see if current user is creator of the post and if they are on profile page, show edit and delete */}
             {session?.user.id === post.creator._id && pathName === '/profile' && (
                 <div className="mt-5 flex-center gap-4 border-t border-gray-100 pt-3">
