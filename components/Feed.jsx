@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import PromptCard from './PromptCard';
 
 const PromptCardList = ({ data, handleTagClick }) => {
+    // need to update feed to show votes and hughest votes count first
     return (
         <div className='mt-16 prompt_layout'>
             {data.map((post) => (
