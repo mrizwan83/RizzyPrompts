@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
+// import { useSession } from 'next-auth/react';
 
 import PromptCard from './PromptCard';
 
@@ -12,6 +13,8 @@ const PromptCardList = ({ data, handleTagClick }) => {
                     key={post._id}
                     post={post}
                     handleTagClick={handleTagClick}
+                // handleDownvote={handleDownvote}
+                // handleUpvote={handleUpvote}
                 />
             ))}
         </div>
@@ -19,6 +22,7 @@ const PromptCardList = ({ data, handleTagClick }) => {
 }
 
 const Feed = () => {
+    // const { data: session } = useSession();
 
     // search states 
     // searchText will be used to display the search params to client
@@ -94,15 +98,10 @@ const Feed = () => {
                 />
             </form>
             {/* Search prompts or all prompts on feed */}
-            {searchText ? (
-                <PromptCardList
-                    data={searchedResults}
-                    handleTagClick={handleTagClick}
-                />
-            ) : (<PromptCardList
-                data={posts}
+            <PromptCardList
+                data={searchText ? searchedResults : posts}
                 handleTagClick={handleTagClick}
-            />)}
+            />
         </section>
     )
 }

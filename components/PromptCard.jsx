@@ -10,10 +10,11 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
     const router = useRouter();
     const [copied, setCopied] = useState("");
     const [voted, setVoted] = useState(false); // Track whether the user has voted (first time vote)
+    const [clientPost, setClientPost] = useState(post)
 
     const checkTheVotes = async () => {
-        const alreadyVoted = post.votedBy.includes(session?.user?.id)
-        if (alreadyVoted) setVoted(true);
+        const alreadyVoted = clientPost.votedBy.includes(session?.user?.id)
+        setVoted(alreadyVoted);
     }
 
     useEffect(() => {
@@ -33,11 +34,11 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
                 },
                 body: JSON.stringify({ userId: session?.user.id }),
             });
-
+            const data = await response.json();
             if (response.ok) {
                 // Upvote successful
                 setVoted(true); // Mark the user as voted
-                post.upvotes++; // Update the local vote count
+                setClientPost(data);
             }
         } catch (error) {
             console.log(error);
@@ -54,11 +55,33 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
                 },
                 body: JSON.stringify({ userId: session.user.id }),
             });
-
+            const data = await response.json();
             if (response.ok) {
                 // Downvote successful
                 setVoted(true); // Mark the user as voted
-                post.downvotes++; // Update the local vote count
+                setClientPost(data);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    // handle vote change
+    const handleVoteChange = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`/api/prompt/${post._id}/votechange`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId: session.user.id }),
+            });
+            const data = await response.json();
+            if (response.ok) {
+                // Downvote successful
+                setClientPost(data.prompt);
+                setVoted(false); // Mark the user as unvoted
             }
         } catch (error) {
             console.log(error);
@@ -118,7 +141,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
                         width={22}
                         height={22}
                     />
-                    <span className='font-satoshi font-semibold text-gray-900'>{post.upvotes}</span>
+                    <span className='font-satoshi font-semibold text-gray-900'>{clientPost.upvotes}</span>
                 </div>
                 <div className="flex justify-center gap-3">
                     <Image
@@ -127,19 +150,27 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
                         width={22}
                         height={22}
                     />
-                    <span className='font-satoshi font-semibold text-gray-900'>{post.downvotes}</span>
+                    <span className='font-satoshi font-semibold text-gray-900'>{clientPost.downvotes}</span>
                 </div>
             </div>
             {/* if user is logged, give them voting functionality */}
             {session && !voted ? (<div className="flex items-center justify-around mt-2 gap-5">
-                <button disabled={!session} className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-small rounded-full text-sm px-4 py-2 text-center mr-2 mb-2" onClick={handleUpvote}>Upvote</button>
-                <button disabled={!session} className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-small rounded-full text-sm px-4 py-2 text-center mr-2 mb-2" onClick={handleDownvote}>Downvote</button>
-            </div>) : null}
+                <button disabled={!session} className="text-white bg-gradient-to-br from-green-400 via-blue-500 to-cyan-600 hover:bg-gradient-to-bl focus:outline-none font-small rounded-full text-sm px-3 py-1 text-center" onClick={handleUpvote}>Upvote</button>
+                <button disabled={!session} className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:outline-none  font-small rounded-full text-sm px-3 py-1 text-center" onClick={handleDownvote}>Downvote</button>
+            </div>) :
+                session && (
+                    <div className="flex items-center justify-around mt-2 gap-5">
+                        <button disabled={!session} type="button" className="outline_btn border-none" onClick={handleVoteChange}>
+                            Change My Vote!
+                        </button>
+                    </div>
+                )
+            }
             {/* check to see if current user is creator of the post and if they are on profile page, show edit and delete */}
             {session?.user.id === post.creator._id && pathName === '/profile' && (
-                <div className="mt-5 flex-center gap-4 border-t border-gray-100 pt-3">
-                    <p className="font-inter text-sm green_gradient cursor-pointer" onClick={handleEdit}>Edit</p>
-                    <p className="font-inter text-sm orange_gradient cursor-pointer" onClick={handleDelete}>Delete</p>
+                <div className="mt-5 flex-center gap-4 border-t border-gray-200 pt-3">
+                    <p className="font-inter font-semibold text-sm custom_gradient cursor-pointer" onClick={handleEdit}>Edit</p>
+                    <p className="font-inter font-semibold text-sm custom_gradient_2 cursor-pointer" onClick={handleDelete}>Delete</p>
                 </div>
             )}
         </div>

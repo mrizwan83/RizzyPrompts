@@ -4,13 +4,28 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from 'react';
 import { signOut, useSession, getProviders } from 'next-auth/react';
+import { useRouter } from "next/navigation";
 
 const Nav = () => {
+    const router = useRouter();
+
 
     const { data: session } = useSession();
 
     const [providers, setProviders] = useState(null);
     const [toggleDropdown, settoggleDropdown] = useState(false);
+
+    const logout = async (e) => {
+        e.preventDefault();
+        await signOut({
+            callbackUrl: "/",
+            onSuccess: () => {
+                router.push("/");
+            },
+        });
+    };
+
+
 
     // fetch the providers from nextauth, and useEffect hook to call only once at start
     useEffect(() => {
@@ -21,6 +36,7 @@ const Nav = () => {
         }
         fetchProviders();
     }, []);
+
 
 
     return (
@@ -34,7 +50,7 @@ const Nav = () => {
                     height={30}
                     className="object-contain"
                 />
-                <p className="logo_text"><span className="orange_gradient">Rizzy</span>Prompts</p>
+                <p className="logo_text"><span className="custom_gradient">Rizzy</span><span className="custom_gradient_2">Prompts</span></p>
             </Link>
 
             {/* Desktop Navigation  once it crosses small size display flex otherwise hidden on small screens*/}
@@ -46,7 +62,7 @@ const Nav = () => {
                             Create Post
                         </Link>
 
-                        <button type="button" onClick={signOut} className="outline_btn">
+                        <button type="button" onClick={logout} className="outline_btn">
                             Sign Out
                         </button>
 
@@ -111,7 +127,7 @@ const Nav = () => {
                                     type="button"
                                     onClick={() => {
                                         settoggleDropdown(false);
-                                        signOut();
+                                        logout();
                                     }}
                                     className="mt-5 w-full black_btn"
                                 >

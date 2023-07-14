@@ -4,7 +4,7 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
     return (
         <section className="w-full max-w-full flex-start flex-col">
             <h1 className="head_text text-left">
-                <span className="blue_gradient">{type} Post</span>
+                <span className="custom_gradient">{type} Post</span>
             </h1>
             <p className="desc text-left max-w-md">
                 {type} and share extraordinary prompts on our innovative platform. Ignite imagination and explore the limitless possibilities of seamless integration.
@@ -45,7 +45,7 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
                     <button
                         type="submit"
                         disabled={submitting}
-                        className="px-5 py-1.5 text-sm bg-primary-orange rounded-full text-white"
+                        className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:outline-none  font-small rounded-full text-sm px-3 py-1 text-center"
                     >
                         {submitting ? `${type}...` : type}
                     </button>
