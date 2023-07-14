@@ -13,8 +13,6 @@ const PromptCardList = ({ data, handleTagClick }) => {
                     key={post._id}
                     post={post}
                     handleTagClick={handleTagClick}
-                // handleDownvote={handleDownvote}
-                // handleUpvote={handleUpvote}
                 />
             ))}
         </div>
@@ -97,6 +95,7 @@ const Feed = () => {
                     className='search_input peer'
                 />
             </form>
+            {/* adds here maybe?????? */}
             {/* Search prompts or all prompts on feed */}
             <PromptCardList
                 data={searchText ? searchedResults : posts}
