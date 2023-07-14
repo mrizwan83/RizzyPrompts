@@ -1,5 +1,4 @@
 import "@styles/globals.css";
-import Head from 'next/head';
 import Nav from "@components/Nav";
 import Provider from "@components/Provider";
 import Footer from "@components/Footer";
@@ -15,10 +14,6 @@ export const metadata = {
 const RootLayout = ({ children }) => {
     return (
         <html lang="en">
-            <Head>
-                <title>{metadata.title}</title>
-                <meta name="description" content={metadata.description} />
-            </Head>
             <link rel="icon" type="image/svg" href="/assets/images/logo.svg" />
             <body>
                 <Provider>
