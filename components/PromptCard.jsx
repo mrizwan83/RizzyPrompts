@@ -160,7 +160,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
             </div>) :
                 session && (
                     <div className="flex items-center justify-around mt-2 gap-5">
-                        <button disabled={!session} type="button" className="outline_btn border-none" onClick={handleVoteChange}>
+                        <button disabled={!session} type="button" className="change_btn border-none" onClick={handleVoteChange}>
                             Change My Vote!
                         </button>
                     </div>
