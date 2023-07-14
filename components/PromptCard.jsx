@@ -106,7 +106,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
 
     return (
         <div className='prompt_card'>
-            <div className="flex justify-between items-start gap-5">
+            <div className="flex flex-wrap justify-between items-start gap-5">
                 <div className='flex-1 flex justify-start items-center gap-3 cursor-pointer' onClick={handleProfileClick}>
                     <Image
                         src={post.creator.image}
@@ -118,8 +118,6 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
 
                     <div className="flex flex-col">
                         <h3 className='font-satoshi font-semibold text-gray-900'>{post.creator.username}</h3>
-                        {/* take out the email because of privacy issues */}
-                        {/* <p>{post.creator.email}</p> */}
                     </div>
                 </div>
                 <div className="copy_btn" onClick={handleCopy}>
