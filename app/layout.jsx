@@ -2,6 +2,7 @@ import "@styles/globals.css";
 import Head from 'next/head';
 import Nav from "@components/Nav";
 import Provider from "@components/Provider";
+import Footer from "@components/Footer";
 
 export const metadata = {
     title: "RizzyPrompts - Discover, Share, and Create Prompts for AI",
@@ -28,6 +29,7 @@ const RootLayout = ({ children }) => {
                     <main className='app'>
                         <Nav />
                         {children}
+                        <Footer />
                     </main>
                 </Provider>
             </body>
