@@ -18,10 +18,6 @@ const ProfilePage = () => {
             setPosts(data);
         }
         if (session?.user.id) fetchPosts();
-        else {
-            alert("Please Sign In to View Profiles");
-            router.push("/api/auth/signin");
-        };
     }, []);
 
     const handleEdit = (post) => {
