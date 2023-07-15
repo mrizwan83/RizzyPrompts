@@ -3,9 +3,12 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
+
 import Profile from '@components/Profile';
 
 const ProfilePage = () => {
+
+    const [loaderVisible, setLoaderVisible] = useState(false);
 
     const { data: session } = useSession();
     const router = useRouter();
@@ -13,9 +16,12 @@ const ProfilePage = () => {
     // fetch data when page loads
     useEffect(() => {
         const fetchPosts = async () => {
+            setLoaderVisible(true);
             const response = await fetch(`/api/users/${session?.user.id}/posts`);
             const data = await response.json();
             setPosts(data);
+            setLoaderVisible(false);
+
         }
         if (session?.user.id) fetchPosts();
     }, []);
@@ -49,6 +55,7 @@ const ProfilePage = () => {
             data={posts}
             handleEdit={handleEdit}
             handleDelete={handleDelete}
+            loaderVisible={loaderVisible}
         />
     )
 }

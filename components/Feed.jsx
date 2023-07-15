@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 // import { useSession } from 'next-auth/react';
-
+import Loader from './Loader';
 import PromptCard from './PromptCard';
 
 const PromptCardList = ({ data, handleTagClick }) => {
@@ -20,7 +20,7 @@ const PromptCardList = ({ data, handleTagClick }) => {
 }
 
 const Feed = () => {
-    // const { data: session } = useSession();
+    const [loaderVisible, setLoaderVisible] = useState(true);
 
     // search states 
     // searchText will be used to display the search params to client
@@ -34,6 +34,7 @@ const Feed = () => {
         const response = await fetch('/api/prompt');
         const data = await response.json();
         setPosts(data);
+        setLoaderVisible(false);
     };
 
     // fetch post data when page loads
@@ -95,12 +96,13 @@ const Feed = () => {
                     className='search_input peer'
                 />
             </form>
-            {/* adds here maybe?????? */}
             {/* Search prompts or all prompts on feed */}
-            <PromptCardList
+
+            {loaderVisible ? (<Loader />) : (<PromptCardList
                 data={searchText ? searchedResults : posts}
                 handleTagClick={handleTagClick}
-            />
+            />)}
+
         </section>
     )
 }

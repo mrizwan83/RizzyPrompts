@@ -8,6 +8,8 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
     const { data: session } = useSession();
     const pathName = usePathname();
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
+
     const [copied, setCopied] = useState("");
     const [voted, setVoted] = useState(false); // Track whether the user has voted (first time vote)
     const [clientPost, setClientPost] = useState(post)
@@ -26,6 +28,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
 
     const handleUpvote = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const response = await fetch(`/api/prompt/${post._id}/upvote`, {
                 method: 'PATCH',
@@ -42,11 +45,14 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleDownvote = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const response = await fetch(`/api/prompt/${post._id}/downvote`, {
                 method: 'PATCH',
@@ -63,12 +69,15 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     };
 
     // handle vote change
     const handleVoteChange = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const response = await fetch(`/api/prompt/${post._id}/votechange`, {
                 method: 'PATCH',
@@ -85,6 +94,8 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -158,12 +169,12 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
             </div>
             {/* if user is logged, give them voting functionality */}
             {session && !voted ? (<div className="flex items-center justify-around mt-2 gap-5">
-                <button disabled={!session} className="text-white bg-gradient-to-br from-green-400 via-blue-500 to-cyan-600 hover:bg-gradient-to-bl focus:outline-none font-small rounded-full text-sm px-3 py-1 text-center" onClick={handleUpvote}>Upvote</button>
-                <button disabled={!session} className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:outline-none  font-small rounded-full text-sm px-3 py-1 text-center" onClick={handleDownvote}>Downvote</button>
+                <button disabled={loading} className="text-white bg-gradient-to-br from-green-400 via-blue-500 to-cyan-600 hover:bg-gradient-to-bl focus:outline-none font-small rounded-full text-sm px-3 py-1 text-center" onClick={handleUpvote}>Upvote</button>
+                <button disabled={loading} className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:outline-none  font-small rounded-full text-sm px-3 py-1 text-center" onClick={handleDownvote}>Downvote</button>
             </div>) :
                 session && (
                     <div className="flex items-center justify-around mt-2 gap-5">
-                        <button disabled={!session} type="button" className="change_btn border-none" onClick={handleVoteChange}>
+                        <button disabled={loading} type="button" className="change_btn border-none" onClick={handleVoteChange}>
                             Change My Vote!
                         </button>
                     </div>

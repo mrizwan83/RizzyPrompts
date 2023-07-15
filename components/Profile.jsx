@@ -1,6 +1,7 @@
-import PromptCard from "./PromptCard"
+import PromptCard from "./PromptCard";
+import Loader from "./Loader";
 
-const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
+const Profile = ({ name, desc, data, handleEdit, handleDelete, loaderVisible }) => {
     return (
         <section className="w-full">
             <h1 className="head_text text-left">
@@ -9,7 +10,7 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
                 </span>
             </h1>
             <p className="desc text-left">{desc}</p>
-            <div className='mt-10 prompt_layout'>
+            {loaderVisible ? (<Loader />) : (<div className='mt-10 prompt_layout'>
                 {data.map((post) => (
                     <PromptCard
                         key={post._id}
@@ -18,7 +19,7 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
                         handleDelete={() => handleDelete && handleDelete(post)}
                     />
                 ))}
-            </div>
+            </div>)}
         </section>
     )
 }
