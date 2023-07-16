@@ -45,7 +45,6 @@ const Feed = () => {
     // filter the prompts with the search params
     const filterPrompts = (searchInput) => {
         const regex = new RegExp(searchInput, "i"); // the "i" flag is for case-insensitive search
-        console.log(regex);
         // use direct return on filter func
         return posts.filter((ele) => (
             regex.test(ele.creator.username) ||

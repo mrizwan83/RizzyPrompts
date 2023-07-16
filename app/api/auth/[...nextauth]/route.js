@@ -1,8 +1,6 @@
 import NextAuth from "next-auth/next";
 import GoogleProvider from 'next-auth/providers/google';
 import GithubProvider from "next-auth/providers/github";
-import FacebookProvider from 'next-auth/providers/facebook';
-
 import User from "@models/user";
 import { connectToDB } from "@utils/database";
 
@@ -18,11 +16,6 @@ const handler = NextAuth({
             clientId: process.env.GOOGLE_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             // name: "or Sign up with Google"
-        }),
-        FacebookProvider({
-            clientId: process.env.FACEBOOK_ID,
-            clientSecret: process.env.FACEBOOK_SECRET,
-            // name: "or Sign up with Facebook"
         }),
         GithubProvider({
             clientId: process.env.GITHUB_ID,
@@ -45,7 +38,6 @@ const handler = NextAuth({
         async signIn({ profile }) {
             try {
                 await connectToDB();
-                console.log(profile);
 
                 // check if a user already exists
                 const userExists = await User.findOne({

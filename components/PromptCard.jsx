@@ -108,7 +108,6 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
 
     // handle profile link
     const handleProfileClick = () => {
-        console.log(post);
 
         if (post.creator._id === session?.user.id) return router.push("/profile");
         // route to dynamic profile page, pass the username along
