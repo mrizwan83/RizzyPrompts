@@ -150,7 +150,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
                         width={22}
                         height={22}
                         className="object-contain"
-                        style={{ width: "auto" }}
+
                     />
                     <span className='font-satoshi font-semibold text-gray-500'>{clientPost.upvotes}</span>
                 </div>
@@ -161,7 +161,6 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
                         width={22}
                         height={22}
                         className="object-contain"
-                        style={{ width: "auto" }}
                     />
                     <span className='font-satoshi font-semibold text-gray-500'>{clientPost.downvotes}</span>
                 </div>
