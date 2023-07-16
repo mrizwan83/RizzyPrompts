@@ -144,24 +144,27 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
             <p className='font-inter text-sm blue_gradient cursor-pointer' onClick={() => handleTagClick && handleTagClick(post.tag)}>#{post.tag}</p>
             <div className="flex items-end justify-around mt-2 gap-5">
                 <div className="flex justify-center gap-3">
-                    <Image
-                        src='/assets/icons/upvote.svg'
-                        alt='upvotes'
-                        width={22}
-                        height={22}
-                        className="object-contain"
-
-                    />
+                    <div>
+                        <Image
+                            src='/assets/icons/upvote.svg'
+                            alt='upvotes'
+                            width={22}
+                            height={22}
+                            className="object-contain"
+                        />
+                    </div>
                     <span className='font-satoshi font-semibold text-gray-500'>{clientPost.upvotes}</span>
                 </div>
                 <div className="flex justify-center gap-3">
-                    <Image
-                        src='/assets/icons/downvote.svg'
-                        alt='downvotes'
-                        width={22}
-                        height={22}
-                        className="object-contain"
-                    />
+                    <div>
+                        <Image
+                            src='/assets/icons/downvote.svg'
+                            alt='downvotes'
+                            width={22}
+                            height={22}
+                            className="object-contain"
+                        />
+                    </div>
                     <span className='font-satoshi font-semibold text-gray-500'>{clientPost.downvotes}</span>
                 </div>
             </div>
