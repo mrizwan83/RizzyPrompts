@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from 'react';
-import { signOut, useSession, getProviders } from 'next-auth/react';
+import { signIn, signOut, useSession, getProviders } from 'next-auth/react';
 import { useRouter } from "next/navigation";
 
 const Nav = () => {
@@ -24,6 +24,8 @@ const Nav = () => {
             },
         });
     };
+
+
 
 
 
@@ -80,14 +82,9 @@ const Nav = () => {
                     <>
                         {providers &&
 
-
-                            <Link
-                                href="/api/auth/signin"
-                                className="black_btn"
-                            >
+                            <button type="button" onClick={signIn} className="black_btn">
                                 Sign In
-                            </Link>
-
+                            </button>
 
                         }
                     </>
@@ -125,10 +122,7 @@ const Nav = () => {
                                 </Link>
                                 <button
                                     type="button"
-                                    onClick={() => {
-                                        settoggleDropdown(false);
-                                        logout();
-                                    }}
+                                    onClick={logout}
                                     className="mt-5 w-full black_btn"
                                 >
                                     Sign Out
@@ -138,12 +132,11 @@ const Nav = () => {
                     </div>
                 ) : (<>
                     {providers &&
-                        <Link
-                            href="/api/auth/signin"
-                            className="black_btn"
-                        >
+
+
+                        <button type="button" onClick={signIn} className="black_btn">
                             Sign In
-                        </Link>
+                        </button>
                     }
                 </>)}
             </div>
