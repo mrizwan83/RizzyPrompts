@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
-
 import Profile from '@components/Profile';
 
 const ProfilePage = () => {
@@ -13,17 +12,24 @@ const ProfilePage = () => {
     const { data: session } = useSession();
     const router = useRouter();
     const [posts, setPosts] = useState([]);
+
     // fetch data when page loads
     useEffect(() => {
         const fetchPosts = async () => {
             setLoaderVisible(true);
-            const response = await fetch(`/api/users/${session?.user.id}/posts`);
-            const data = await response.json();
-            setPosts(data);
-            setLoaderVisible(false);
-
+            try {
+                const response = await fetch(`/api/users/${session?.user.id}/posts`);
+                const data = await response.json();
+                setPosts(data);
+            } catch (error) {
+                console.error("Error fetching posts:", error);
+            } finally {
+                setLoaderVisible(false);
+            }
         }
-        if (session?.user.id) fetchPosts();
+        if (session?.user.id) {
+            fetchPosts();
+        }
     }, []);
 
     const handleEdit = (post) => {
@@ -42,11 +48,10 @@ const ProfilePage = () => {
                 const filteredPosts = posts.filter((p) => p._id !== post._id);
                 setPosts(filteredPosts);
             } catch (error) {
-                console.log(error);
+                console.error("Error deleting prompt:", error);
             }
         }
     }
-
 
     return (
         <Profile
@@ -60,4 +65,4 @@ const ProfilePage = () => {
     )
 }
 
-export default ProfilePage
+export default ProfilePage;
