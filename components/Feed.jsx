@@ -31,10 +31,15 @@ const Feed = () => {
     const [posts, setPosts] = useState([]);
 
     const fetchPosts = async () => {
-        const response = await fetch('/api/prompt');
-        const data = await response.json();
-        setPosts(data);
-        setLoaderVisible(false);
+        try {
+            const response = await fetch('/api/prompt');
+            const data = await response.json();
+            setPosts(data);
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        } finally {
+            setLoaderVisible(false);
+        }
     };
 
     // fetch post data when page loads

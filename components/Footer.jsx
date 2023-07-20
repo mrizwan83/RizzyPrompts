@@ -4,7 +4,7 @@ const Footer = () => {
     return (
         <footer className="w-full bg-transparent py-8">
             <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
-                <div className="text-gray-800 text-center md:text-left p-3">
+                <div className="text-gray-800 text-center mt-4 md:mt-0 p-3">
                     <p className="text-lg font-semibold">Developer: Mohammad H. Rizwan</p>
                     <p className="text-sm">Professional Web Developer | AI Enthusiast</p>
                     <p className="text-sm">© 2023 RizzyPrompts. All rights reserved.</p>
