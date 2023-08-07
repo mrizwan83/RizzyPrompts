@@ -23,7 +23,7 @@ const Footer = () => {
                         <Link href="https://www.linkedin.com/in/mohammad-h-rizwan/" target="_blank" className="flex gap-1 flex-center text-gray-600 transition-all duration-300 hover:text-gray-900 hover:scale-110 ">
                             <Image
                                 src="/assets/images/linkedIn.svg"
-                                alt="RizzyPrompts Logo"
+                                alt="LinkedIn Logo"
                                 width={15}
                                 height={15}
                                 className="object-contain"
@@ -35,7 +35,7 @@ const Footer = () => {
                         <Link href="https://www.github.com/mrizwan83" target="_blank" className="flex gap-1 flex-center text-gray-600 transition-all duration-300 hover:text-gray-900 hover:scale-110 ">
                             <Image
                                 src="/assets/images/github.svg"
-                                alt="RizzyPrompts Logo"
+                                alt="Github Logo"
                                 width={15}
                                 height={15}
                                 className="object-contain"
@@ -43,10 +43,10 @@ const Footer = () => {
                             Github
                         </Link>
                         <span className="text-gray-500 mx-2">|</span>
-                        <Link href="https://mrizwan83.github.io/mrizwan83/" target="_blank" className="flex gap-1 flex-center text-gray-600 transition-all duration-300 hover:text-gray-900 hover:scale-110 ">
+                        <Link href="https://mrizwan-portfolio.vercel.app/" target="_blank" className="flex gap-1 flex-center text-gray-600 transition-all duration-300 hover:text-gray-900 hover:scale-110 ">
                             <Image
                                 src="/assets/images/portfolio.svg"
-                                alt="RizzyPrompts Logo"
+                                alt="Portfolio Logo"
                                 width={15}
                                 height={15}
                                 className="object-contain"
